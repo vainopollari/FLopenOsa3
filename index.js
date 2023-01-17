@@ -72,7 +72,15 @@ app.post('/api/persons', (request, response) => {
         name: body.name,
         number: body.number
     }
+
+    const check = persons.find(person1 => person1.name === body.name)
   
+    if (check) {
+        console.log("cannot add")
+        return response.status(400).json({ 
+            error: 'name must be unique' 
+          })
+    }
     persons = persons.concat(person)
   
     response.json(person)
