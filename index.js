@@ -1,5 +1,10 @@
-const express = require('express')()
-const app = express
+const { response } = require('express')
+
+const express = require('express')
+const app = express()
+
+app.use(express.json())
+
 
 let persons = [
     {
@@ -24,6 +29,12 @@ let persons = [
       }
 ]
 
+const generateId = () => {
+    min = Math.ceil(10)
+    max = Math.floor(120)
+    return Math.floor(Math.random() * (max - min) + min)
+}
+
 app.get('/info', (req, res) => {
     const amount = persons.length
     const date = new Date()
@@ -39,6 +50,32 @@ app.get('/api/persons/:id', (request, response) => {
     } else {
       response.status(404).end()
     }
+})
+
+app.delete('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    persons = persons.filter(person => person.id !== id)
+
+    res.status(204).end()
+})
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+    if (!body.name || !body.number) {
+      return response.status(400).json({ 
+        error: 'content missing' 
+      })
+    }
+  
+    const person = {
+        id: generateId(),
+        name: body.name,
+        number: body.number
+    }
+  
+    persons = persons.concat(person)
+  
+    response.json(person)
 })
 
 app.get('/api/persons', (req, res) => {
