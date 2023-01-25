@@ -1,1 +1,1 @@
-GET https://puhelinluettelo-backend-wk0i.onrender.com
+GET https://bold-wildflower-3336.fly.dev/api/persons
